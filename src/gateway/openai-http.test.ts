@@ -145,6 +145,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
             message?: string;
             extraSystemPrompt?: string;
             images?: Array<{ type: string; data: string; mimeType: string }>;
+            runId?: string;
           }
         | undefined;
     const getFirstAgentMessage = () => getFirstAgentCall()?.message ?? "";
@@ -655,6 +656,23 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
         const msg = (choice0.message as Record<string, unknown> | undefined) ?? {};
         expect(msg.role).toBe("assistant");
         expect(msg.content).toBe("hello");
+      }
+
+      {
+        const traceId = "trace-openai-header-1";
+        mockAgentOnce([{ text: "hello" }]);
+        const res = await postChatCompletions(
+          port,
+          {
+            model: "openclaw",
+            messages: [{ role: "user", content: "hi" }],
+          },
+          { "x-request-id": traceId },
+        );
+        expect(res.status).toBe(200);
+        const json = (await res.json()) as { id?: string };
+        expect(json.id).toBe(traceId);
+        expect(getFirstAgentCall()?.runId).toBe(traceId);
       }
 
       {
