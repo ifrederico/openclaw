@@ -1,0 +1,5 @@
+import { n as resolvePreferredOpenClawTmpDir } from "../../tmp-openclaw-dir-DzRxfh9a.js";
+import { t as definePluginEntry } from "../../plugin-entry-CK-4XWE0.js";
+import "../../diffs-Ctto8cNR.js";
+import "../../api-C2u2oHfS.js";
+export { definePluginEntry, resolvePreferredOpenClawTmpDir };

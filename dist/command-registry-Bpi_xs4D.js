@@ -1,0 +1,14 @@
+import "./env-D1ktUnAV.js";
+import "./paths-CjuwkA2v.js";
+import "./safe-text-K2Nonoo3.js";
+import "./tmp-openclaw-dir-DzRxfh9a.js";
+import "./theme-BH5F9mlg.js";
+import "./version-DGzLsBG-.js";
+import "./zod-schema.agent-runtime-DNndkpI8.js";
+import "./runtime-BF_KUcJM.js";
+import "./registry-bOiEdffE.js";
+import "./ip-ByO4-_4f.js";
+import "./register.subclis-Ii6V3e5O.js";
+import "./core-command-descriptors-25KixZol.js";
+import { n as registerCoreCliByName } from "./command-registry-DF-T9w3H.js";
+export { registerCoreCliByName };
