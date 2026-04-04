@@ -1014,6 +1014,58 @@ describe("OpenResponses HTTP API (e2e)", () => {
     await ensureResponseConsumed(res);
   });
 
+  it("uses x-request-id as the response and run id when present", async () => {
+    const port = enabledPort;
+    const traceId = "trace-responses-header-1";
+    agentCommand.mockClear();
+    agentCommand.mockResolvedValueOnce({
+      payloads: [{ text: "hello" }],
+    } as never);
+
+    const res = await postResponses(
+      port,
+      {
+        stream: false,
+        model: "openclaw",
+        input: "hello",
+      },
+      { "x-request-id": traceId },
+    );
+    expect(res.status).toBe(200);
+    const json = (await res.json()) as { id?: string };
+    const opts = (agentCommand.mock.calls[0] as unknown[] | undefined)?.[0] as
+      | { runId?: string }
+      | undefined;
+    expect(json.id).toBe(traceId);
+    expect(opts?.runId).toBe(traceId);
+  });
+
+  it("prefers metadata.trace_id over x-request-id for response ids", async () => {
+    const port = enabledPort;
+    agentCommand.mockClear();
+    agentCommand.mockResolvedValueOnce({
+      payloads: [{ text: "hello" }],
+    } as never);
+
+    const res = await postResponses(
+      port,
+      {
+        stream: false,
+        model: "openclaw",
+        input: "hello",
+        metadata: { trace_id: "trace-responses-metadata-1" },
+      },
+      { "x-request-id": "trace-responses-header-2" },
+    );
+    expect(res.status).toBe(200);
+    const json = (await res.json()) as { id?: string };
+    const opts = (agentCommand.mock.calls[0] as unknown[] | undefined)?.[0] as
+      | { runId?: string }
+      | undefined;
+    expect(json.id).toBe("trace-responses-metadata-1");
+    expect(opts?.runId).toBe("trace-responses-metadata-1");
+  });
+
   it("caps response session cache by evicting the oldest entries", () => {
     for (let i = 0; i < 505; i += 1) {
       openResponsesTesting.storeResponseSessionAt(`resp_${i}`, `session_${i}`, i);

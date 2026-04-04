@@ -154,6 +154,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
             message?: string;
             extraSystemPrompt?: string;
             images?: Array<{ type: string; data: string; mimeType: string }>;
+            runId?: string;
             senderIsOwner?: boolean;
           }
         | undefined;
@@ -693,6 +694,29 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
     } finally {
       // shared server
     }
+  });
+
+  it("uses x-request-id as the response and run id when present", async () => {
+    const port = enabledPort;
+    const traceId = "trace-openai-header-1";
+    agentCommand.mockClear();
+    agentCommand.mockResolvedValueOnce({ payloads: [{ text: "hello" }] } as never);
+
+    const res = await postChatCompletions(
+      port,
+      {
+        model: "openclaw",
+        messages: [{ role: "user", content: "hi" }],
+      },
+      { "x-request-id": traceId },
+    );
+    expect(res.status).toBe(200);
+    const json = (await res.json()) as { id?: string };
+    const firstCall = (agentCommand.mock.calls[0] as unknown[] | undefined)?.[0] as
+      | { runId?: string }
+      | undefined;
+    expect(json.id).toBe(traceId);
+    expect(firstCall?.runId).toBe(traceId);
   });
 
   it("returns 429 for repeated failed auth when gateway.auth.rateLimit is configured", async () => {
