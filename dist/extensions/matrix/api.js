@@ -1,0 +1,10 @@
+import { a as resolveMatrixDefaultOrOnlyAccountId, c as resolveMatrixEnvAccountToken, i as resolveMatrixChannelConfig, n as requiresExplicitMatrixDefaultAccount, o as getMatrixScopedEnvVarNames, r as resolveConfiguredMatrixAccountIds, s as listMatrixEnvAccountIds, t as findMatrixAccountEntry } from "../../account-selection-Kb2g1MkO.js";
+import { a as resolveMatrixCredentialsPath, c as resolveMatrixLegacyFlatStoreRoot, i as resolveMatrixCredentialsFilename, l as sanitizeMatrixPathSegment, n as resolveMatrixAccountStorageRoot, o as resolveMatrixHomeserverKey, r as resolveMatrixCredentialsDir, s as resolveMatrixLegacyFlatStoragePaths, t as hashMatrixAccessToken } from "../../storage-paths-BA-E_6x_.js";
+import { f as setMatrixThreadBindingMaxAgeBySessionKey, n as getMatrixThreadBindingManager, o as resetMatrixThreadBindingsForTests, u as setMatrixThreadBindingIdleTimeoutBySessionKey } from "../../thread-bindings-shared-Dd7u4t0I.js";
+import { t as matrixSetupAdapter } from "../../setup-core-BJNjkH5t.js";
+import { t as matrixOnboardingAdapter } from "../../setup-surface-C6DkzrYE.js";
+import { t as createMatrixThreadBindingManager } from "../../thread-bindings-TdCszBIY.js";
+//#region extensions/matrix/api.ts
+const matrixSessionBindingAdapterChannels = ["matrix"];
+//#endregion
+export { createMatrixThreadBindingManager, findMatrixAccountEntry, getMatrixScopedEnvVarNames, getMatrixThreadBindingManager, hashMatrixAccessToken, listMatrixEnvAccountIds, matrixOnboardingAdapter, matrixOnboardingAdapter as matrixSetupWizard, matrixSessionBindingAdapterChannels, matrixSetupAdapter, requiresExplicitMatrixDefaultAccount, resetMatrixThreadBindingsForTests, resolveConfiguredMatrixAccountIds, resolveMatrixAccountStorageRoot, resolveMatrixChannelConfig, resolveMatrixCredentialsDir, resolveMatrixCredentialsFilename, resolveMatrixCredentialsPath, resolveMatrixDefaultOrOnlyAccountId, resolveMatrixEnvAccountToken, resolveMatrixHomeserverKey, resolveMatrixLegacyFlatStoragePaths, resolveMatrixLegacyFlatStoreRoot, sanitizeMatrixPathSegment, setMatrixThreadBindingIdleTimeoutBySessionKey, setMatrixThreadBindingMaxAgeBySessionKey };
