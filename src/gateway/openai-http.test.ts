@@ -673,6 +673,27 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
       }
 
       {
+        mockAgentOnce([{ text: "hello" }]);
+        const traceId = "trace-openai-http";
+        const res = await postChatCompletions(
+          port,
+          {
+            stream: false,
+            model: "openclaw",
+            messages: [{ role: "user", content: "hi" }],
+          },
+          { "x-request-id": traceId },
+        );
+        expect(res.status).toBe(200);
+        const json = (await res.json()) as Record<string, unknown>;
+        expect(json.id).toBe(traceId);
+        const opts = (agentCommand.mock.calls[0] as unknown[] | undefined)?.[0] as
+          | { runId?: string }
+          | undefined;
+        expect(opts?.runId).toBe(traceId);
+      }
+
+      {
         agentCommand.mockClear();
         agentCommand.mockResolvedValueOnce({ payloads: [{ text: "" }] } as never);
         const json = await postSyncUserMessage("hi");

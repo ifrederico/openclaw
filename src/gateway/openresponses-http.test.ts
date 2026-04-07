@@ -935,6 +935,61 @@ describe("OpenResponses HTTP API (e2e)", () => {
     expect(events.some((event) => event.data === "[DONE]")).toBe(true);
   });
 
+  it("uses x-request-id as the response and run id when present", async () => {
+    const port = enabledPort;
+    agentCommand.mockClear();
+    agentCommand.mockResolvedValueOnce({
+      payloads: [{ text: "hello" }],
+    } as never);
+
+    const traceId = "trace-openresponses-http";
+    const res = await postResponses(
+      port,
+      {
+        stream: false,
+        model: "openclaw",
+        input: "hi",
+      },
+      { "x-request-id": traceId },
+    );
+
+    expect(res.status).toBe(200);
+    const json = (await res.json()) as { id?: string };
+    expect(json.id).toBe(traceId);
+    const opts = (agentCommand.mock.calls[0] as unknown[] | undefined)?.[0] as
+      | { runId?: string }
+      | undefined;
+    expect(opts?.runId).toBe(traceId);
+  });
+
+  it("prefers metadata.trace_id over x-request-id for response ids", async () => {
+    const port = enabledPort;
+    agentCommand.mockClear();
+    agentCommand.mockResolvedValueOnce({
+      payloads: [{ text: "hello" }],
+    } as never);
+
+    const traceId = "trace-openresponses-metadata";
+    const res = await postResponses(
+      port,
+      {
+        stream: false,
+        model: "openclaw",
+        input: "hi",
+        metadata: { trace_id: traceId },
+      },
+      { "x-request-id": "trace-openresponses-header" },
+    );
+
+    expect(res.status).toBe(200);
+    const json = (await res.json()) as { id?: string };
+    expect(json.id).toBe(traceId);
+    const opts = (agentCommand.mock.calls[0] as unknown[] | undefined)?.[0] as
+      | { runId?: string }
+      | undefined;
+    expect(opts?.runId).toBe(traceId);
+  });
+
   it("reuses the prior session when previous_response_id is provided", async () => {
     const port = enabledPort;
     agentCommand.mockClear();
