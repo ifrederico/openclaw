@@ -1,0 +1,37 @@
+import { u as normalizeE164 } from "../../utils-ms6h9yny.js";
+import { t as formatDocsLink } from "../../links-BFfjc3N-.js";
+import { _ as normalizeAccountId, g as DEFAULT_ACCOUNT_ID } from "../../session-key-BR3Z-ljs.js";
+import { r as buildChannelConfigSchema } from "../../config-schema-BEuKmAWr.js";
+import { a as SignalConfigSchema } from "../../zod-schema.providers-core-COgcDZGS.js";
+import { t as formatCliCommand } from "../../command-format-D6RJqoCJ.js";
+import { t as detectBinary } from "../../detect-binary-B5tovLqI.js";
+import { a as chunkText } from "../../chunk-CKMbnOQL.js";
+import { n as deleteAccountFromConfigSection, r as setAccountEnabledInConfigSection } from "../../config-helpers-C78vnTXw.js";
+import { n as formatPairingApproveHint } from "../../helpers-C-YC9Mfg.js";
+import { n as emptyPluginConfigSchema } from "../../config-schema-BTVf9GZX.js";
+import { s as migrateBaseNameToDefaultAccount, t as applyAccountNameToChannelSection } from "../../setup-helpers-BiAtGxsL.js";
+import { o as getChatChannelMeta } from "../../core-DViv6hbG.js";
+import { t as createPluginRuntimeStore } from "../../runtime-store-Cwr8GGg4.js";
+import { n as resolveAllowlistProviderRuntimeGroupPolicy, r as resolveDefaultGroupPolicy } from "../../runtime-group-policy-DxOE0SLn.js";
+import { t as resolveChannelMediaMaxBytes } from "../../media-limits-bs8TnBXO.js";
+import { t as PAIRING_APPROVED_MESSAGE } from "../../pairing-message-B1YYl-hh.js";
+import "../../text-runtime-CYpCjfTg.js";
+import { c as collectStatusIssuesFromLastError, d as createDefaultChannelRuntimeState, n as buildBaseChannelStatusSummary, t as buildBaseAccountStatusSnapshot } from "../../status-helpers-ChR3_7qO.js";
+import "../../setup-tools-DC-2q-4o.js";
+import "../../config-runtime-j3Yby-w5.js";
+import "../../reply-runtime-2_E7PJwr.js";
+import "../../media-runtime-teBRB60y.js";
+import "../../channel-status-45SWZx-g.js";
+import { i as resolveSignalAccount, n as listSignalAccountIds, r as resolveDefaultSignalAccountId, t as listEnabledSignalAccounts } from "../../accounts-Ckvokb5s.js";
+import { d as looksLikeSignalTargetId, f as normalizeSignalMessagingTarget } from "../../identity-BT9VViOb.js";
+import { t as sendMessageSignal } from "../../send-DhXlv3bt.js";
+import { n as sendReactionSignal, t as removeReactionSignal } from "../../reaction-runtime-api-DC5Nj0gq.js";
+import { n as resolveSignalReactionLevel, t as signalMessageActions } from "../../message-actions-C6DnpGZX.js";
+import "../../config-api-luLsA2e6.js";
+import { n as installSignalCli } from "../../install-signal-cli-BqYvTyYz.js";
+import { t as monitorSignalProvider } from "../../monitor-CZQrvNwD.js";
+import { t as probeSignal } from "../../probe-B391F1zS.js";
+//#region extensions/signal/src/runtime.ts
+const { setRuntime: setSignalRuntime, clearRuntime: clearSignalRuntime, getRuntime: getSignalRuntime } = createPluginRuntimeStore("Signal runtime not initialized");
+//#endregion
+export { DEFAULT_ACCOUNT_ID, PAIRING_APPROVED_MESSAGE, SignalConfigSchema, applyAccountNameToChannelSection, buildBaseAccountStatusSnapshot, buildBaseChannelStatusSummary, buildChannelConfigSchema, chunkText, collectStatusIssuesFromLastError, createDefaultChannelRuntimeState, deleteAccountFromConfigSection, detectBinary, emptyPluginConfigSchema, formatCliCommand, formatDocsLink, formatPairingApproveHint, getChatChannelMeta, installSignalCli, listEnabledSignalAccounts, listSignalAccountIds, looksLikeSignalTargetId, migrateBaseNameToDefaultAccount, monitorSignalProvider, normalizeAccountId, normalizeE164, normalizeSignalMessagingTarget, probeSignal, removeReactionSignal, resolveAllowlistProviderRuntimeGroupPolicy, resolveChannelMediaMaxBytes, resolveDefaultGroupPolicy, resolveDefaultSignalAccountId, resolveSignalAccount, resolveSignalReactionLevel, sendMessageSignal, sendReactionSignal, setAccountEnabledInConfigSection, setSignalRuntime, signalMessageActions };
