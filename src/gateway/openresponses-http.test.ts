@@ -936,6 +936,59 @@ describe("OpenResponses HTTP API (e2e)", () => {
     expect(events.some((event) => event.data === "[DONE]")).toBe(true);
   });
 
+  it("uses x-request-id as the response and run id when present", async () => {
+    const traceId = "chefclaw-response-trace-123";
+    agentCommand.mockClear();
+    agentCommand.mockResolvedValueOnce({
+      payloads: [{ text: "hello" }],
+    } as never);
+
+    const res = await postResponses(
+      enabledPort,
+      {
+        stream: false,
+        model: "openclaw",
+        input: "hi",
+      },
+      { "x-request-id": traceId },
+    );
+
+    expect(res.status).toBe(200);
+    const json = (await res.json()) as { id?: string };
+    const opts = (agentCommand.mock.calls[0] as unknown[] | undefined)?.[0] as
+      | { runId?: string }
+      | undefined;
+    expect(json.id).toBe(traceId);
+    expect(opts?.runId).toBe(traceId);
+  });
+
+  it("prefers metadata.trace_id over x-request-id for response ids", async () => {
+    const traceId = "chefclaw-metadata-trace-123";
+    agentCommand.mockClear();
+    agentCommand.mockResolvedValueOnce({
+      payloads: [{ text: "hello" }],
+    } as never);
+
+    const res = await postResponses(
+      enabledPort,
+      {
+        stream: false,
+        model: "openclaw",
+        input: "hi",
+        metadata: { trace_id: traceId },
+      },
+      { "x-request-id": "chefclaw-header-trace-ignored" },
+    );
+
+    expect(res.status).toBe(200);
+    const json = (await res.json()) as { id?: string };
+    const opts = (agentCommand.mock.calls[0] as unknown[] | undefined)?.[0] as
+      | { runId?: string }
+      | undefined;
+    expect(json.id).toBe(traceId);
+    expect(opts?.runId).toBe(traceId);
+  });
+
   it("reuses the prior session when previous_response_id is provided", async () => {
     const port = enabledPort;
     agentCommand.mockClear();

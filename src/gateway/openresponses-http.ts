@@ -667,7 +667,10 @@ export async function handleOpenResponsesHttpRequest(
     return true;
   }
 
-  const responseId = `resp_${randomUUID()}`;
+  const responseId =
+    payload.metadata?.trace_id?.trim() ||
+    getHeader(req, "x-request-id")?.trim() ||
+    `resp_${randomUUID()}`;
   const rememberResponseSession = () =>
     storeResponseSession(responseId, sessionKey, responseSessionScope);
   const outputItemId = `msg_${randomUUID()}`;

@@ -38,6 +38,7 @@ import type { ResolvedGatewayAuth } from "./auth.js";
 import { sendJson, setSseHeaders, watchClientDisconnect, writeDone } from "./http-common.js";
 import { handleGatewayPostJsonEndpoint } from "./http-endpoint-helpers.js";
 import {
+  getHeader,
   resolveGatewayRequestContext,
   resolveOpenAiCompatModelOverride,
   resolveOpenAiCompatibleHttpOperatorScopes,
@@ -591,7 +592,7 @@ export async function handleOpenAiHttpRequest(
     return true;
   }
 
-  const runId = `chatcmpl_${randomUUID()}`;
+  const runId = getHeader(req, "x-request-id")?.trim() || `chatcmpl_${randomUUID()}`;
   const deps = createDefaultDeps();
   const abortController = new AbortController();
   const commandInput = buildAgentCommandInput({
