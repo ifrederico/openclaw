@@ -136,6 +136,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
             message?: string;
             extraSystemPrompt?: string;
             images?: Array<{ type: string; data: string; mimeType: string }>;
+            runId?: string;
             senderIsOwner?: boolean;
           }
         | undefined;
@@ -658,6 +659,24 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
         const msg = (choice0.message as Record<string, unknown> | undefined) ?? {};
         expect(msg.role).toBe("assistant");
         expect(msg.content).toBe("hello");
+      }
+
+      {
+        const traceId = "chefclaw-chat-trace-123";
+        mockAgentOnce([{ text: "hello" }]);
+        const res = await postChatCompletions(
+          port,
+          {
+            stream: false,
+            model: "openclaw",
+            messages: [{ role: "user", content: "hi" }],
+          },
+          { "x-request-id": traceId },
+        );
+        expect(res.status).toBe(200);
+        const json = (await res.json()) as Record<string, unknown>;
+        expect(json.id).toBe(traceId);
+        expect(getFirstAgentCall()?.runId).toBe(traceId);
       }
 
       {
